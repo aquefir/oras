@@ -20,6 +20,6 @@ This diagram gives a general overview of what the compilation procees looks like
 
 Although nominally “files” are used to explain the model in familiar terms, they are only files in the sense that they are streams of data with certain characteristics. It is a radical departure from the UNIX model of software compilation where files are given concrete significance in the form of object files and linking.
 
-The effects achieved by linking in the UNIX model are actually done *before* assembly code is turned into machine code here; we call this **desymbolisation**. This is what turns your typical assembly code into *absolute* assembly code, a strict subset of the Oración assembly language where all of the relativity of labels have been transformed into offsets and addresses with respect to the targeted machine context.
+The effects achieved by linking in the UNIX model are actually done *before* assembly code is turned into machine code here; we call this **desymbolisation**. This is what turns your typical assembly code into *absolute* assembly code, a strict subset of the Oración assembly language where all of the relativity of labels has been transformed into offsets and addresses with respect to the targeted machine context.
 
 This is done with the help of a machine context configuration file, which more or less does what a linker script would have done: defining memory regions, locating sections, defining additional symbols, locating entry points, contextualising volatility and persistence of I/O, et cetera.
