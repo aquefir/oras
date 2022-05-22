@@ -26,7 +26,7 @@ INCLUDES :=
 INCLUDEL := src
 
 # space-separated library name list
-LIBS    :=
+LIBS    := uni_err uni_himem uni_log uni_str
 LIBDIRS :=
 
 # '3P' are in-tree 3rd-party dependencies
@@ -42,7 +42,8 @@ FWORKS :=
 CFILES    := \
 	src/main.c
 CPPFILES  :=
-PRVHFILES :=
+PRVHFILES := \
+	src/main.h
 
 # test suite sources
 TES_CFILES    :=
