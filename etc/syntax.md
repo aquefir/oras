@@ -13,6 +13,8 @@ Oración assembly interfaces: `.osi`
 1. Normal line comments, beginning with a single hash `#` but not two or more
 2. Doc line comments, beginning with two or more hashes `##`
 
+All source characters in an assembly file must be ASCII, unless they are on a line whose first non-whitespace characters are the string `##`. This allows non-Latin scripts as inline documentation without excessively burdening the lexer (it is encoding agnostic).
+
 `oras` does not provide a "block comment", although it does provide a C-style "nesting block comment" using directives to block out code:
 
 ## Conditional emission
