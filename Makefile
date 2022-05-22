@@ -40,9 +40,11 @@ FWORKS :=
 
 # sources
 CFILES    := \
+	src/lexer.c \
 	src/main.c
 CPPFILES  :=
 PRVHFILES := \
+	src/lexer.h \
 	src/main.h
 
 # test suite sources

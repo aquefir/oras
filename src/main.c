@@ -13,6 +13,8 @@
 #include <uni/str.h>
 #include <uni/types/int.h>
 
+#define BUF_SZ 65536
+
 const char * const help_text =
 	"\noras\nThe Oracion Assembler\n\nCreated by Alexander Nicholi\n"
 	"Copyright (C) 2022 Aquefir.\nAll rights reserved.\n\nUsage:\n\n"
@@ -24,6 +26,34 @@ const char * const help_text =
 const char * const help_text2 =
 	" absent, stdout\n      is used. If only one optional parameter "
 	"is given, it is assumed\n      to be [input].\n";
+
+int main( int ac, char * av[] )
+{
+	/* TODO: Preamble (popt, input, initial state) */
+	const ptri argc  = ac <= 0 ? 0 : (ptri)ac;
+	u8 ** const argv = ascii_check( av, argc );
+
+	const struct preamble p = preamble( argv );
+
+	if( !p.valid || p.helpwanted )
+	{
+		printf( "%s%s\n", help_text, help_text2 );
+
+		return p.valid ? 0 : 127;
+	}
+
+	printf( "%s\n", p.text );
+
+	/* TODO: Lexer (turn raw input into token stream) */
+
+	/* TODO: Parser (turn token stream into AST) */
+
+	/* TODO: Generator (turn AST into assembly) */
+
+	printf( "\n" );
+
+	return 0;
+}
 
 u8 ** ascii_check( char * av[], ptri ac )
 {
@@ -39,7 +69,7 @@ u8 ** ascii_check( char * av[], ptri ac )
 		{
 			const u8 c = (u8)av[i][j];
 
-			if( c & 0x80 )
+			if( c >= 0x80 )
 			{
 				uni_perror(
 					"Invalid character in argv[%lu] at position %lu: 0x%02X\n",
@@ -58,32 +88,10 @@ u8 ** ascii_check( char * av[], ptri ac )
 	return ret;
 }
 
-int main( int ac, char * av[] )
+struct preamble preamble( u8 ** av )
 {
-	/* TODO: Preamble (popt, input, initial state) */
-	const ptri argc  = ac <= 0 ? 0 : (ptri)ac;
-	u8 ** const argv = ascii_check( av, argc );
-	struct state s   = preamble( argv );
-
-	if( !s.valid || s.helpwanted )
-	{
-		printf( "%s%s\n", help_text, help_text2 );
-
-		return s.valid ? 0 : 127;
-	}
-
-	/* TODO: Lexer (turn raw input into token stream) */
-
-	/* TODO: Parser (turn token stream into AST) */
-
-	/* TODO: Generator (turn AST into assembly) */
-
-	return 0;
-}
-
-struct state preamble( u8 ** av )
-{
-	struct state ret;
+	struct preamble ret;
+	u8 * in = NULL;
 	ptri i;
 
 	uni_memset( &ret, 0, sizeof ret );
@@ -115,11 +123,11 @@ struct state preamble( u8 ** av )
 		{
 			if( i == 2 )
 			{
-				ret.in = av[i];
+				in = av[i];
 			}
 			else if( i == 3 )
 			{
-				ret.out = av[i];
+				ret.outfname = av[i];
 			}
 			else
 			{
@@ -131,6 +139,60 @@ struct state preamble( u8 ** av )
 			ret.valid = 0;
 		}
 	}
+
+	return ret.valid ? preamble2( ret, in ) : ret;
+}
+
+struct preamble preamble2( struct preamble ret, u8 * in )
+{
+	FILE * const fd = in == NULL ? stdin : fopen( (const char *)in, "rb" );
+	u8 buf[BUF_SZ];
+	ptri text_sz = 0, text_cap = BUF_SZ;
+
+	uni_memset( buf, 0, BUF_SZ );
+	ret.text = uni_alloc( sizeof( u8 ) * BUF_SZ );
+
+	if( in == NULL )
+	{
+		freopen( NULL, "rb", stdin );
+	}
+
+	for( ;; )
+	{
+		const ptri count = (ptri)fread( buf, BUF_SZ, 1, fd );
+		void * const o   = (void *)( (ptri)ret.text + text_sz );
+
+		if( text_sz + count > text_cap )
+		{
+			/* << 1 -> * 2 */
+			u8 * const nu = uni_realloc( ret.text, text_cap << 1 );
+
+			ret.text = nu;
+			text_cap <<= 1; /* *= 2 */
+		}
+
+		uni_memcpy( o, (const void *)buf, count );
+		text_sz += count;
+
+		if( count < BUF_SZ )
+		{
+			if( ferror( fd ) )
+			{
+				uni_perror( "Failure reading input stream" );
+
+				ret.valid = 0;
+
+				return ret;
+			}
+
+			break;
+		}
+	}
+
+	/* realloc so it's just big enough */
+	ret.text = uni_realloc( ret.text, text_sz + 1 );
+	/* place the NUL at the end now since we're done */
+	ret.text[text_sz] = '\0';
 
 	return ret;
 }
