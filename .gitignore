@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+/oras
+
 /data
 /3rdparty/*
 !/3rdparty/README
