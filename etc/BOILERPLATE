@@ -2,18 +2,18 @@ This file contains the project's copypastable boilerplate comment headers.
 
 Boilerplate for C-like languages:
 
-/****************************************************************************\
- *                            Oracion  Assembler                            *
- *                                                                          *
- *                        Copyright (C) 2022 Aquefir                        *
- *                 Released under Artisan Software Licence.                 *
-\****************************************************************************/
+/*****************************************************************************\
+ *                             Oracion Assembler                             *
+ *                                                                           *
+ *                        Copyright (C) 2022 Aquefir.                        *
+ *                  Released under Artisan Software Licence                  *
+\*****************************************************************************/
 
 Hash-based boilerplate (Python, POSIX shell, Makefile):
 
-##############################################################################
-##                            Oracion  Assembler                            ##
-##                                                                          ##
-##                        Copyright (C) 2022 Aquefir                        ##
-##                 Released under Artisan Software Licence.                 ##
-##############################################################################
+###############################################################################
+##                             Oracion Assembler                             ##
+##                                                                           ##
+##                        Copyright (C) 2022 Aquefir.                        ##
+##                  Released under Artisan Software Licence                  ##
+###############################################################################

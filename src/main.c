@@ -1,9 +1,9 @@
-/****************************************************************************\
- *                            Oracion  Assembler                            *
- *                                                                          *
- *                        Copyright (C) 2022 Aquefir                        *
- *                 Released under Artisan Software Licence.                 *
-\****************************************************************************/
+/*****************************************************************************\
+ *                             Oracion Assembler                             *
+ *                                                                           *
+ *                        Copyright (C) 2022 Aquefir.                        *
+ *                  Released under Artisan Software Licence                  *
+\*****************************************************************************/
 
 #include "main.h"
 
@@ -35,7 +35,7 @@ int main( int ac, char * av[] )
 
 	const struct preamble p = preamble( argv );
 
-	if( !p.valid || p.helpwanted )
+	if(!p.valid || p.helpwanted)
 	{
 		printf( "%s%s\n", help_text, help_text2 );
 
@@ -61,15 +61,15 @@ u8 ** ascii_check( char * av[], ptri ac )
 	u8 ** ret = uni_alloc( sizeof( u8 * ) * ( ac + 1 ) );
 	ret[ac]   = NULL;
 
-	for( i = 0; i < ac; ++i )
+	for(i = 0; i < ac; ++i)
 	{
 		ptri j;
 
-		for( j = 0; av[i][j] != '\0'; ++j )
+		for(j = 0; av[i][j] != '\0'; ++j)
 		{
 			const u8 c = (u8)av[i][j];
 
-			if( c >= 0x80 )
+			if(c >= 0x80)
 			{
 				uni_perror(
 					"Invalid character in argv[%lu] at position %lu: 0x%02X\n",
@@ -96,20 +96,20 @@ struct preamble preamble( u8 ** av )
 
 	uni_memset( &ret, 0, sizeof ret );
 
-	for( i = 0; av[i] != NULL; ++i )
+	for(i = 0; av[i] != NULL; ++i)
 	{
 		const char * a = (const char *)av[i];
 
-		if( uni_strequ( a, "-h" ) || uni_strequ( a, "--help" ) )
+		if(uni_strequ( a, "-h" ) || uni_strequ( a, "--help" ))
 		{
 			/* set it as invalid if we already asked for help or
 			 * assembly */
 			ret.valid = ret.helpwanted || ret.assemble ? 0 : 1;
 			ret.helpwanted = 1;
 		}
-		else if( uni_strequ( a, "assemble" ) )
+		else if(uni_strequ( a, "assemble" ))
 		{
-			if( i != 1 )
+			if(i != 1)
 			{
 				ret.valid = 0;
 			}
@@ -121,11 +121,11 @@ struct preamble preamble( u8 ** av )
 		}
 		else if( ret.assemble )
 		{
-			if( i == 2 )
+			if(i == 2)
 			{
 				in = av[i];
 			}
-			else if( i == 3 )
+			else if(i == 3)
 			{
 				ret.outfname = av[i];
 			}
@@ -152,17 +152,17 @@ struct preamble preamble2( struct preamble ret, u8 * in )
 	uni_memset( buf, 0, BUF_SZ );
 	ret.text = uni_alloc( sizeof( u8 ) * BUF_SZ );
 
-	if( in == NULL )
+	if(in == NULL)
 	{
 		freopen( NULL, "rb", stdin );
 	}
 
-	for( ;; )
+	for(;;)
 	{
 		const ptri count = (ptri)fread( buf, BUF_SZ, 1, fd );
-		void * const o   = (void *)( (ptri)ret.text + text_sz );
+		void * const o   = (void *)((ptri)ret.text + text_sz);
 
-		if( text_sz + count > text_cap )
+		if(text_sz + count > text_cap)
 		{
 			/* << 1 -> * 2 */
 			u8 * const nu = uni_realloc( ret.text, text_cap << 1 );
@@ -174,11 +174,16 @@ struct preamble preamble2( struct preamble ret, u8 * in )
 		uni_memcpy( o, (const void *)buf, count );
 		text_sz += count;
 
-		if( count < BUF_SZ )
+		if(count < BUF_SZ)
 		{
-			if( ferror( fd ) )
+			if(ferror( fd ))
 			{
 				uni_perror( "Failure reading input stream" );
+
+				if(in != NULL)
+				{
+					fclose( fd );
+				}
 
 				ret.valid = 0;
 
@@ -193,6 +198,11 @@ struct preamble preamble2( struct preamble ret, u8 * in )
 	ret.text = uni_realloc( ret.text, text_sz + 1 );
 	/* place the NUL at the end now since we're done */
 	ret.text[text_sz] = '\0';
+
+	if(in != NULL)
+	{
+		fclose( fd );
+	}
 
 	return ret;
 }

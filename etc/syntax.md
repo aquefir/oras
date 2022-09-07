@@ -4,6 +4,8 @@ Recommended file extension: `.os`
 
 Oración assembly interfaces: `.osi`
 
+Absolute assembly files (label-free): `.osa`
+
 -----
 
 ## Comments
@@ -106,6 +108,6 @@ main:
 	BX R0
 ```
 
-Local labels do not have their symbols emitted for external use, while normal labels are always made available externally. This means the GNU `as` meaning of `.global` is always implied for normal labels in `oras`.
+Oracion does not "emit" symbols like other assemblers do, because it does not generate object code of any kind. Rather, these symbols are made available in the text format of the file for humans and programmatically using the ANSI C API reference, through which they can be reasoned about or ultimately resolved into addresses or offsets for a machine.
 
-`oras` assembly does not directly deal with resolving the real locations of any symbols, instead leaving this to the "Gordian" linker system. That program follows a linker script that provides architectural context and additional symbols for resolving and linking assembly output.
+`oras` assembly does not directly deal with resolving the real locations of any symbols, instead leaving this to the "Gordian" desymboliser tool. That program follows a linker script that provides architectural context and additional symbols for resolving and linking assembly output.

@@ -1,9 +1,9 @@
-/****************************************************************************\
- *                            Oracion  Assembler                            *
- *                                                                          *
- *                        Copyright (C) 2022 Aquefir                        *
- *                 Released under Artisan Software Licence.                 *
-\****************************************************************************/
+/*****************************************************************************\
+ *                             Oracion Assembler                             *
+ *                                                                           *
+ *                        Copyright (C) 2022 Aquefir.                        *
+ *                  Released under Artisan Software Licence                  *
+\*****************************************************************************/
 
 #ifndef INC__ORAS_LEXER_H
 #define INC__ORAS_LEXER_H

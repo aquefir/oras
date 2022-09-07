@@ -22,7 +22,8 @@
 			"compilerPath": "/usr/bin/gcc",
 			"cStandard": "c89",
 			"cppStandard": "c++11",
-			"intelliSenseMode": "gcc-x64"
+			"intelliSenseMode": "gcc-x64",
+			"configurationProvider": "ms-vscode.makefile-tools"
 		}, {
 			"name": "Mac",
 			"includePath": [

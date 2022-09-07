@@ -1,9 +1,9 @@
-##############################################################################
-##                            Oracion  Assembler                            ##
-##                                                                          ##
-##                        Copyright (C) 2022 Aquefir                        ##
-##                 Released under Artisan Software Licence.                 ##
-##############################################################################
+###############################################################################
+##                             Oracion Assembler                             ##
+##                                                                           ##
+##                        Copyright (C) 2022 Aquefir.                        ##
+##                  Released under Artisan Software Licence                  ##
+###############################################################################
 
 ifeq ($(strip $(AQ)),)
 $(error "AQ was not found in your environment. You need to install the Slick Makefiles from github.com/aquefir/slick to continue.")
@@ -42,16 +42,9 @@ FWORKS :=
 CFILES    := \
 	src/lexer.c \
 	src/main.c
-CPPFILES  :=
 PRVHFILES := \
 	src/lexer.h \
 	src/main.h
-
-# test suite sources
-TES_CFILES    :=
-TES_CPPFILES  :=
-TES_PUBHFILES :=
-TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk
